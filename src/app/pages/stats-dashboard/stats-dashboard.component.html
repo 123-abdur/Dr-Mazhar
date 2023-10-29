@@ -1,0 +1,156 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div>
+                <div class="row">
+                    <div class="col-lg-3 mb-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Date</label>
+                            <input type="date" class="form-control form-control-alternative"
+                                [(ngModel)]="selectedDate" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mb-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Doctor</label>
+                            <select class="form-control form-control-alternative" [(ngModel)]="DoctorId">
+                                <option value="">Select</option>
+                                <option *ngFor="let list of doctorList" value="{{list.id}}">
+                                    {{list.userName}}</option>
+                                <option value="0">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mb-2" style="margin-top: 4%;">
+                        <a class="btn btn-sm btn-primary" (click)="viewDetail();patientList()">Search</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card stats -->
+            <div class="row">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: 11px;">
+                                        Amount Recieved</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{totalAmount}}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: 11px;">Total
+                                        Patient</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{totalPatient}}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: 11px;">
+                                        Total Patient Take Internal Medicine</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{totalIM}}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="row" style="padding: 4%;">
+    <div class="col">
+        <div class="card shadow">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group" style="padding: 4%;">
+                        <input class="form-control" type="text" [(ngModel)]="searchText"
+                            placeholder="Search with Name or Token No.">
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Sr.No</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone#</th>
+                            <th scope="col">Weight</th>
+                            <th scope="col">Token No.</th>
+                            <th scope="col">Action</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let list of  filterUsers() | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage; let i = index">
+                            <td>
+                                {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+                            </td>
+                            <td>
+                                {{list.name}}
+                            </td>
+                            <td>
+                                {{list.mobile}}
+                            </td>
+                            <td>
+                                {{list.weight}}
+                            </td>
+                            <td>
+                                {{list.tokenNo}}
+                            </td>
+                            <td>
+                                <i title="edit" class="fas fa-edit cursor" (click)="showForm(list.id)"></i>
+                                <!-- &nbsp;
+                    <i *ngIf="role =='Doctor'" title="delete" class="fas fa-trash cursor" (click)="delete(list.id)"></i> -->
+                            </td>
+                        </tr>
+                        <tr *ngIf="listOfUser.length == 0">
+                            <td colspan="6" class="font-weight">
+                                No Patient Exist
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <app-custom-pagination *ngIf="listOfUser.length > 0" style="display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 2%;" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+                [totalItems]="listOfUser.length" (pageChange)="changePage($event)"></app-custom-pagination>
+        </div>
+    </div>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

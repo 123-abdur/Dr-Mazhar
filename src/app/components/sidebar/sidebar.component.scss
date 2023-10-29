@@ -1,0 +1,22 @@
+.arrow.open .fas.fa-chevron-down {
+    transform: rotate(180deg);
+  }
+  
+  .sub-menu {
+    display: none;
+    margin-top: 5px;
+    padding-left: 15px;
+  }
+  
+  .sub-menu.open {
+    display: block;
+  }
+  
+  .sub-menu li {
+    list-style-type: none;
+  }
+
+  .pal-6{
+    padding-left: 6%;
+  }
+  

@@ -1,0 +1,22 @@
+
+.modal-body {
+    max-height: 300px; /* Set the desired height */
+    overflow-y: auto;
+  }
+
+  .search{
+    flex-wrap: nowrap;
+    display: flex;
+    gap: 10px;
+  }
+
+  .grow{
+    flex-grow: 1;
+  }
+  .p-4{
+    padding: 4%;
+  }
+
+
+
+  

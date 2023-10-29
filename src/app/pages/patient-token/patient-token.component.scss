@@ -1,0 +1,7 @@
+.centered-container {
+    background-color: #f1a1a1;
+    display: flex;
+    align-items: center; /* Horizontal centering */
+    justify-content: center; /* Vertical centering */
+    height: 100vh; /* Make the container take the full height of the viewport */
+}

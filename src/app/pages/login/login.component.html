@@ -1,0 +1,35 @@
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100 .p-t-12 p-b-20">
+      <form [formGroup]="loginForm" class="login100-form">
+        <span class="login100-form-title p-b-70">
+          Welcome
+        </span>
+        <span class="login100-form-avatar">
+          <img src="./assets/img/avatar-01.jpg" alt="AVATAR">
+        </span>
+
+        <div class="wrap-input100 validate-input m-t-30 m-b-35">
+          <label class="form-control-label">Name</label>
+          <input class="input100" type="text" formControlName="email">
+        </div>
+        <span class="error" *ngIf="validateCheck && errorCtr.email.errors?.required">
+          Name is required.
+        </span>
+        <div class="wrap-input100 validate-input m-b-50">
+          <label class="form-control-label">Password</label>
+          <input class="input100" type="password" formControlName="password">
+        </div>
+        <span class="error" *ngIf="validateCheck && errorCtr.password.errors?.required">
+          Password is required.
+        </span>
+        <div class="container-login100-form-btn">
+          <button class="login100-form-btn" (click)="submitForm()">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

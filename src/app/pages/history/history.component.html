@@ -1,0 +1,164 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<!-- Form -->
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">History</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <input type="text" [(ngModel)]="mobileValue" maxlength="11"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" (input)="valuechange()"
+                                            class="form-control form-control-alternative" placeholder="xxxxxxxxxx">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <select class="form-control form-control-alternative" [(ngModel)]="name" >
+                                            <option value="">Select</option>
+                                            <option *ngFor="let item of options" [value]="item.name">{{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div>
+                                        <a class="btn btn-sm btn-primary" (click)="showHistory()">View history</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr *ngIf="historyCheck  && patienHistory.length > 0" class="my-4" />
+                        <h6 *ngIf="historyCheck" class="heading-small text-muted mb-4">
+                            History</h6>
+                        <span *ngIf="historyCheck && patienHistory.length > 0">
+                            <div class="row align-items-center">
+                                <div class="col-12 text-right">
+                                    <a class="btn btn-sm btn-primary" (click)="historyCheck = false"> Close History
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="container" style="max-height: 500px;overflow: auto;margin-top: 4%;">
+                                <div *ngFor="let item of patienHistory">
+                                    <span *ngIf="item.patient_internal_medicine.length > 0" class="card"
+                                        style="padding: 2%;margin: 2%;">
+                                        <div class="pl-lg-4">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-control-label">Doctor Name:</label>
+                                                        {{item.doctorName}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-control-label">Date</label>
+                                                        {{item.createdDate | date:'yyyy-MM-dd'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span *ngIf="role != 'Receptionist'">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-control-label">Outdoor Medicine:</label>
+                                                        <p [innerHTML]="convertNewlinesToBreaks(item.outdoor)"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-control-label">Symptoms:</label>
+                                                        <p [innerHTML]="convertNewlinesToBreaks(item.symptoms)"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-control-label">Diagnosis:</label>
+                                                        <p [innerHTML]="convertNewlinesToBreaks(item.diagnosis)"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-control-label">Advised:</label>
+                                                        <p [innerHTML]="convertNewlinesToBreaks(item.advised)"></p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
+                                        </div>
+                                        <span *ngIf="role != 'Receptionist'">
+                                        <hr  class="my-4" />
+                                        <div *ngFor="let medicine of item.patient_internal_medicine;">
+                                            <div class="pl-lg-4">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div>
+                                                            <label class="form-control-label">Medicine Type:</label>
+                                                            {{medicine.medicineTypeName}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div>
+                                                            <label class="form-control-label">Medicine:</label>
+                                                            {{medicine.medicineName}}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="form-group">
+                                                            <label class="form-control-label">Dosage:</label>
+                                                            <span *ngIf="medicine.dosageN">{{medicine.dosageN}}
+                                                                {{medicine.unit}}</span>
+                                                            <span *ngIf="!medicine.dosageN">{{medicine.dosage}}
+                                                                {{medicine.unit}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div>
+                                                            <label class="form-control-label">Time:</label>
+                                                            {{medicine.time}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </span>
+                        <span *ngIf="historyCheck && patienHistory.length == 0">
+                            <h2 style="display: flex;
+                            flex-wrap: wrap;
+                            justify-content: center;">No Previous History</h2>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

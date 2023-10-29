@@ -1,0 +1,103 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+    <div *ngIf="role =='Doctor'" class="pl-lg-4">
+        <div class="row">
+            <div class="col-lg-4">
+                <span style="color: white;font-weight: bolder;">Total Token Done: </span><span
+                    style="color: white;">{{doneToken}}</span>
+            </div>
+            <div class="col-lg-4">
+                <span style="color: white;font-weight: bolder;">Sitting Patient: </span><span
+                    style="color: white;">{{sittingPatient}}</span>
+            </div>
+            <div class="col-lg-4">
+                <span style="color: white;font-weight: bolder;">Token No Checked: </span><span
+                    style="color: white;">{{recentTokenChecked}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="row align-items-center p-2">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item" (click)="selectTab('newPatient');userList(false)">
+                                <a class="nav-link" [ngClass]="{'active': selectedTab === 'newPatient'}">New Patient</a>
+                            </li>
+                            <li class="nav-item" (click)="selectTab('checkedPatient');checkUserList()">
+                                <a class="nav-link" [ngClass]="{'active': selectedTab === 'checkedPatient'}">Checked
+                                    Patient</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group" style="padding: 4%;">
+                            <input class="form-control" type="text" [(ngModel)]="searchText"
+                                placeholder="Search with Name or Token No.">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Sr.No</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Phone#</th>
+                                <th scope="col">Weight</th>
+                                <th scope="col">Token No.</th>
+                                <th scope="col">Action</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let list of  filterUsers() | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage; let i = index">
+                                <td>
+                                    {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+                                </td>
+                                <td>
+                                    {{list.name}}
+                                </td>
+                                <td>
+                                    {{list.mobile}}
+                                </td>
+                                <td>
+                                    {{list.weight}}
+                                </td>
+                                <td>
+                                    {{list.tokenNo}}
+                                </td>
+                                <td>
+                                    <i title="edit" class="fas fa-edit cursor" (click)="showForm(list.id)"></i>
+                                    <!-- &nbsp;
+                                    <i *ngIf="role =='Doctor'" title="delete" class="fas fa-trash cursor" (click)="delete(list.id)"></i> -->
+                                </td>
+                            </tr>
+                            <tr *ngIf="listOfUser.length == 0">
+                                <td colspan="6" class="font-weight">
+                                    No Patient Exist
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <app-custom-pagination *ngIf="listOfUser.length > 0" style="display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 2%;" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+                    [totalItems]="listOfUser.length" (pageChange)="changePage($event)"></app-custom-pagination>
+
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

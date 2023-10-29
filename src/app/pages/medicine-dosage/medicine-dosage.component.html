@@ -1,0 +1,175 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body"></div>
+    </div>
+</div>
+<div *ngIf="!showFormCheck" class="container-fluid mt--7">
+    <!-- Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="row align-items-center p-2">
+                    <div class="col-4">
+                        <h3 class="mb-0">Medicine Dosage</h3>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group mb-0">
+                            <input class="form-control" type="text" [(ngModel)]="searchText"
+                                placeholder="Search with Medicine Name or Type">
+                        </div>
+                    </div>
+                    <div class="col-4 text-right">
+                        <a class="btn btn-sm btn-primary" (click)="showForm('Add')">Add</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Sr.No</th>
+                                <th scope="col">Medicine Type</th>
+                                <th scope="col">Medicine</th>
+                                <th scope="col">Action</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let list of filterMedicine() | slice:(currentPage-1)*itemsPerPage:currentPage*itemsPerPage; let i = index">
+                                <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                                <td>{{list.medicineTypeName}}</td>
+                                <td>{{list.medicineName}}</td>
+                                <td>
+                                    <i title="edit" class="fas fa-edit cursor" (click)="showForm('Update',list)"></i>
+                                    &nbsp;
+                                    <i title="delete" class="fas fa-trash cursor" (click)="delete(list.id)"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <app-custom-pagination *ngIf="listOfDosagemedi.length > 0" style="display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 2%;" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+                    [totalItems]="listOfDosagemedi.length" (pageChange)="changePage($event)"></app-custom-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Form -->
+<div *ngIf="showFormCheck" class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">{{ formHeading }} Medicine Dosage</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <i class="fa fa-times-circle cursor" (click)="showForm('close')"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="medicineDosageForm">
+                        <h6 class="heading-small text-muted mb-4">Medicine Dosage information</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Medicine Type<span
+                                                class="error">*</span></label>
+                                        <select class="form-control form-control-alternative"
+                                            formControlName="medicineTypeId" (change)="callMedicineList()">
+                                            <option value="">Select</option>
+                                            <option *ngFor="let list of medTypeList" value="{{list.id}}">
+                                                {{list.medicineTypeName}}</option>
+                                        </select>
+                                        <span class="error"
+                                            *ngIf="validateCheck && errorCtr.medicineTypeId.errors?.required">
+                                            Medicine type is required.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Medicine<span class="error">*</span></label>
+                                        <select class="form-control form-control-alternative"
+                                            (change)="unit($event.target.value)" formControlName="medicineId">
+                                            <option value="">Select</option>
+                                            <option *ngFor="let list of mediList" value="{{list.id}}">
+                                                {{list.medicineName}}</option>
+                                        </select>
+                                        <span class="error"
+                                            *ngIf="validateCheck && errorCtr.medicineId.errors?.required">
+                                            Medicine is required.
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Dosage Array -->
+                        <div formArrayName="DosageMedicine" style="max-height: 400px;
+                        overflow-y: auto;">
+                            <div *ngFor="let dosageGroup of DosageMedicine.controls; let i = index" class="col-lg-12">
+                                <div [formGroup]="dosageGroup">
+                                    <div class="pl-lg-4">
+                                        <div class="row">
+                                            <div class="col-lg-5">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">Weight<span
+                                                            class="error">*</span></label>
+                                                    <input class="form-control form-control-alternative"  oninput="this.value = this.value.replace(/[^0-9.+]/g, '')"
+                                                        formControlName="weight">
+                                                    <span class="error"
+                                                        *ngIf="validateCheck && dosageGroup.controls.weight.errors?.required">
+                                                        Weight is required.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-5">
+                                                <div class="form-group">
+                                                    <label class="form-control-label">Dosage<span
+                                                            class="error">*</span></label>
+                                                    <input class="form-control form-control-alternative" type="text"  oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                                        formControlName="dosage">
+                                                    <span class="error"
+                                                        *ngIf="validateCheck && dosageGroup.controls.dosage.errors?.required">
+                                                        Dosage is required.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                                <div>
+                                                    {{unitForMedi}}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <i title="delete" class="fas fa-trash cursor" (click)="removeDosage(i)"
+                                                    style="padding-top: 42px;"></i>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- <button type="button" class="btn btn-sm btn-danger" (click)="removeDosage(i)">Delete</button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-12 text-right">
+                                <a class="btn btn-sm btn-primary" (click)="addDosage()">Add
+                                    Dosage</a>
+                                <a class="btn btn-sm btn-primary" (click)="submitForm(formHeading)">{{ formHeading
+                                    }}</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

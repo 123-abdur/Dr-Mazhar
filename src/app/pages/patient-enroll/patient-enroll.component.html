@@ -1,0 +1,261 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+    <form [formGroup]="sitPatient">
+        <div class="pl-lg-4">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="form-control-label" style="font-weight: bolder;color: white;">Sitting
+                            Patient</label>
+                        <input type="number" formControlName="inSitPatient"
+                            class="form-control form-control-alternative" placeholder="">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div style="margin-top: 26%;">
+                        <a class="btn btn-sm btn-primary" (click)="updateInsitPatient()">Update</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Form -->
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Enroll Patient</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="enrollPatient">
+                        <h6 class="heading-small text-muted mb-4">Patient information</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Name<span class="error">*</span></label>
+                                        <input type="text" formControlName="name" [readonly]="disableField"
+                                            class="form-control form-control-alternative" placeholder="Name">
+                                        <span class="error" *ngIf="validateCheck && errorCtr.name.errors?.required">
+                                            name is required.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Contact Number<span
+                                                class="error">*</span></label>
+                                        <input type="text" formControlName="mobile" maxlength="11" [readonly]="disableField"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            class="form-control form-control-alternative" placeholder="xxxxxxxxxx">
+                                        <span class="error" *ngIf="validateCheck && errorCtr.mobile.errors?.required">
+                                            mobile is required.
+                                        </span>
+                                        <span class="error"
+                                            *ngIf=" validateCheck && enrollPatient.get('mobile').hasError('minlength')">
+                                            Mobile Number should be 11.
+                                        </span>
+                                        <span class="error"
+                                            *ngIf=" validateCheck && enrollPatient.get('mobile').hasError('maxlength')">
+                                            Mobile Number should be 11.
+                                        </span>
+                                    </div>
+                                    <!-- <a class="btn btn-sm btn-primary" (click)="populateValue()">Populate</a> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Guardian Name<span
+                                                class="error">*</span></label>
+                                        <input type="text" formControlName="guardian"
+                                            class="form-control form-control-alternative" placeholder="Guardian Name">
+                                        <span class="error" *ngIf="validateCheck && errorCtr.guardian.errors?.required">
+                                            Guardian is required.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Weight<span class="error">*</span></label>
+                                        <input type="text" formControlName="weight"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                            class="form-control form-control-alternative" placeholder="1kg">
+                                        <span class="error" *ngIf="validateCheck && errorCtr.weight.errors?.required">
+                                            weight is required.
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Age<span class="error">*</span></label>
+                                        <input type="number" formControlName="age"
+                                            class="form-control form-control-alternative" placeholder="age">
+                                        <span class="error" *ngIf="validateCheck && errorCtr.age.errors?.required">
+                                            age is required.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Gender<span class="error">*</span></label>
+                                        <select class="form-control form-control-alternative" formControlName="gender">
+                                            <option value="">Select</option>
+                                            <option value="false">Male</option>
+                                            <option value="true">Female</option>
+                                        </select>
+                                        <span class="error" *ngIf="validateCheck && errorCtr.gender.errors?.required">
+                                            gender is required.
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Doctor<span class="error">*</span></label>
+                                        <select class="form-control form-control-alternative"
+                                            formControlName="DoctorId">
+                                            <option value="">Select</option>
+                                            <option *ngFor="let list of doctorList" value="{{list.id}}">
+                                                {{list.userName}}</option>
+                                        </select>
+                                        <span class="error" *ngIf="validateCheck && errorCtr.DoctorId.errors?.required">
+                                            doctor is required.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">CNIC <span style="font-size: 10px;">(without
+                                                Dashes)</span></label>
+                                        <input type="text" formControlName="cnic" maxlength="13"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            class="form-control form-control-alternative" placeholder="*************">
+                                        <span class="error"
+                                            *ngIf=" validateCheck && enrollPatient.get('cnic').hasError('minlength')">
+                                            CNIC should be 13.
+                                        </span>
+                                        <span class="error"
+                                            *ngIf=" validateCheck && enrollPatient.get('cnic').hasError('maxlength')">
+                                            CNIC should be 13.
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Blood Pressure</label>
+                                        <input type="text" formControlName="bP"
+                                            class="form-control form-control-alternative" placeholder="Blood Pressure">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Temperature</label>
+                                        <input type="number" formControlName="temperature"
+                                            class="form-control form-control-alternative" placeholder="Temperature">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div *ngIf="dueAmount" class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Remaining Amount</label>
+                                        <input type="text" formControlName="remainingAmount" readonly
+                                            class="form-control form-control-alternative" placeholder="">
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <hr class="my-4" />
+                        <!-- Address -->
+                        <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-address">Address</label>
+                                        <input id="input-address" class="form-control form-control-alternative"
+                                            placeholder="Home Address" formControlName="address" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-12 text-right">
+                                <a *ngIf="!printCheck && !isEditMode" class="btn btn-sm btn-primary" (click)="openModal()">Search</a>
+                                <a *ngIf="!printCheck && !isEditMode" class="btn btn-sm btn-primary"
+                                    (click)="submitForm('Add')">Enroll</a>
+                                <a *ngIf="isEditMode" class="btn btn-sm btn-primary" (click)="updateForm()">Update</a>
+                                <a *ngIf="printCheck" class="btn btn-sm btn-primary" (click)="resetForm()">Done</a>
+                            </div>
+                        </div>
+                    </form>
+                    <div *ngIf="tokenNo.length > 0">
+                        <span style="font-weight: bolder;"> Token Number:
+                        </span><span>{{tokenNo[0]}}_</span><span>{{tokenNo[1]}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': modalOpen, 'd-block': modalOpen}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search Patient</h5>
+            </div>
+            <div class="modal-body">
+                <div class="search">
+                    <div class="grow">
+                    <input type="text" [(ngModel)]="selectedMobile" maxlength="11"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        class="form-control form-control-alternative" placeholder="xxxxxxxxxx">
+                    </div>
+                    <div>
+                        <a class="btn btn-sm btn-primary" (click)="getExistPatient()">Search</a>
+                    </div>
+                </div>
+                <div class="p-4">
+                <ul>
+                    <li *ngFor="let option of options">
+                        <input type="radio" name="option.name" [(ngModel)]="selectedId" [value]="option.id">&nbsp;
+                        <label> {{ option.name }}</label>
+                    </li>
+                </ul>
+                <p *ngIf="options.length == 0">No Record Found</p>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <a *ngIf="options.length > 0" class="btn btn-sm btn-primary" (click)="populateExistPatient()">Populate</a>
+                <a class="btn btn-sm btn-primary" (click)="enrollNew()">Enroll New</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

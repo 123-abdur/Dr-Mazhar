@@ -1,0 +1,26 @@
+<div class="pagination" *ngIf="totalItems > 10">
+    <button class="page-link" (click)="changePage(1)" [disabled]="currentPage === 1"><<</button>
+  
+    <ng-container *ngIf="pagesToDisplay[0] !== 1">
+      <span>1</span>
+    </ng-container>
+  
+    <ng-container *ngIf="pagesToDisplay[0] !== 1">
+      <span>...</span>
+    </ng-container>
+  
+    <button *ngFor="let page of pagesToDisplay" class="page-link" (click)="changePage(page)" [ngClass]="{'selected-page': page === currentPage}">
+      {{ page === '...' ? '...' : page }}
+    </button>
+  
+    <ng-container *ngIf="pagesToDisplay[pagesToDisplay.length - 1] !== totalPages">
+      <span>...</span>
+    </ng-container>
+  
+    <ng-container *ngIf="pagesToDisplay[pagesToDisplay.length - 1] !== totalPages">
+      <span>{{ totalPages }}</span>
+    </ng-container>
+  
+    <button class="page-link" (click)="changePage(totalPages)" [disabled]="currentPage === totalPages">>></button>
+  </div>
+  

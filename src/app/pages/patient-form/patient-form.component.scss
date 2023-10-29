@@ -1,0 +1,101 @@
+.option-class {
+  background-color: #5e72e4;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  outline: none; /* Remove the default outline on focus (optional) */
+}
+
+.form-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.mb-2{
+  margin-bottom: 2%;
+}
+
+.font-weight {
+  font-weight: bolder;
+}
+
+.disabled-textArea {
+  background: #f7fafc;
+  width: 100%;
+  border: none;
+}
+
+.auto-height {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.pad-top-four {
+  padding-top: 4%;
+}
+
+.pad-top-fourty-two-pixel {
+  padding-top: 42px;
+}
+
+.history-div {
+  max-height: 500px;
+  overflow: auto;
+  margin-top: 4%;
+}
+
+.history-card {
+  padding: 2%;
+  margin: 2%;
+}
+
+.flex-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flex-end {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.print-simple {
+  padding-left: 22%;
+  padding-right: 12%;
+}
+
+.print-simple-heading {
+  padding-left: 25%;
+  padding-right: 12%;
+}
+
+.print-outdoor {
+  padding-left: 25%;
+  padding-right: 12%;
+  background: #f7fafc;
+  width: 100%;
+  height: 160px;
+  border: none;
+}
+
+.print-footor {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: black;
+  font-weight: bolder;
+}
+
+.break-text {
+  overflow-wrap: break-word;
+}
+
+.pad-top-sixteen {
+  padding-top: 16%;
+}
