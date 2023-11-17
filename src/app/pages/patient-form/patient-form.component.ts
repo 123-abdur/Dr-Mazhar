@@ -30,6 +30,8 @@ export class PatientFormComponent implements OnInit {
   historyCheck: boolean = false;
   printCheck: boolean = false;
   dosageList: any = [];
+  doctorPreview: any = [];
+  medicinePreview:boolean = false
   medicineTypeID: any;
   currentDate: Date = new Date();
   @ViewChild('textArea1') textArea1: ElementRef;
@@ -177,146 +179,161 @@ export class PatientFormComponent implements OnInit {
         if (result.res.patient_internal_medicine && result.res.patient_internal_medicine.length > 0) {
           this.internalmedi = result.res.patient_internal_medicine;
           //this.patchFormArrayValues(result.res.patient_internal_medicine);
-           this.patchFormArrayValuesLocally(result.res.patient_internal_medicine);
-        } else{
-        /* static work */
-       /* if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101 || this.enrollPatient.value.temperature == 102 || this.enrollPatient.value.temperature == 103 || this.enrollPatient.value.temperature == 104 || this.enrollPatient.value.temperature == 105) {
-          const formArray = this.DosageMedicine;
-          while (formArray.length !== 0) {
-            formArray.removeAt(0);
-          }
-          const foundObject = this.medTypeList.find(item => item.medicineTypeName === 'Syp.');
-          if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 10) {
-            this.addDosage();
-            const control = formArray.at(0);
-            control.get('medicineTypeId').patchValue(foundObject.id);
-            this.medicineList(foundObject.id, control, '0')
-            if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101) {
+          this.patchFormArrayValuesLocally(result.res.patient_internal_medicine);
+        } else {
+
+          //#region new static work
+          if (this.enrollPatient.value.weight < 40) {
+            const formArray = this.DosageMedicine;
+            while (formArray.length !== 0) {
+              formArray.removeAt(0);
+            }
+            const foundObject = this.allMedicineType.find(item => item.medicineTypeName === 'Syp.');
+            if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 10) {
+              this.addDosage();
+              const control = formArray.at(0);
+              control.get('medicineTypeId').patchValue(foundObject?.id);
+              let medicineList = this.getMedicineById(foundObject?.id)
+              control.get('mediList').setValue(medicineList);
+              const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM');
+              control.get('unit').patchValue(foundObject1?.unitofMeasure);
+              control.get('medicineId').patchValue(foundObject1?.id);
+              let dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
+              control.get('dosageList').setValue(dosageList);
+              control.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
               control.get('time').patchValue(3);
-            } else {
-              control.get('time').patchValue(4);
+              if (this.enrollPatient.value.temperature == 102 || this.enrollPatient.value.temperature == 103 || this.enrollPatient.value.temperature == 104 || this.enrollPatient.value.temperature == 105) {
+                control.get('time').patchValue(4);
+              }
             }
-          }
-
-
-
-          if (this.enrollPatient.value.weight >= 10 && this.enrollPatient.value.weight <= 35) {
-            this.addDosage();
-            const control1 = formArray.at(0);
-            control1.get('medicineTypeId').patchValue(foundObject.id);
-            this.medicineList(foundObject.id, control1, '1')
-            if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101) {
+            if (this.enrollPatient.value.weight >= 10 && this.enrollPatient.value.weight <= 35) {
+              this.addDosage();
+              const control1 = formArray.at(0);
+              control1.get('medicineTypeId').patchValue(foundObject?.id);
+              let medicineList = this.getMedicineById(foundObject?.id);
+              control1.get('mediList').setValue(medicineList);
+              const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM 1 Fast');
+              control1.get('unit').patchValue(foundObject1?.unitofMeasure);
+              control1.get('medicineId').patchValue(foundObject1?.id);
+              let dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
+              control1.get('dosageList').setValue(dosageList);
+              control1.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
               control1.get('time').patchValue(3);
-            } else {
-              control1.get('time').patchValue(4);
+              if (this.enrollPatient.value.temperature == 102 || this.enrollPatient.value.temperature == 103 || this.enrollPatient.value.temperature == 104 || this.enrollPatient.value.temperature == 105) {
+                control1.get('time').patchValue(4);
+              }
             }
-          }
-          if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 35) {
-            this.addDosage();
-            const control2 = formArray.at(1);
-            control2.get('medicineTypeId').patchValue(foundObject.id);
-            this.medicineList(foundObject.id, control2, '2')
-            if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101) {
+            if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 35) {
+              this.addDosage();
+              const control2 = formArray.at(1);
+              control2.get('medicineTypeId').patchValue(foundObject?.id);
+              let medicineList = this.getMedicineById(foundObject?.id);
+              control2.get('mediList').setValue(medicineList);
+              const foundObject1 = this.DosageMedicine.at(1).get('mediList').value.find(item => item.medicineName === 'Brufen');
+              control2.get('unit').patchValue(foundObject1?.unitofMeasure);
+              control2.get('medicineId').patchValue(foundObject1?.id);
+              let dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
+              control2.get('dosageList').setValue(dosageList);
+              control2.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
               control2.get('time').patchValue(3);
-            } else {
-              control2.get('time').patchValue(4);
+              if (this.enrollPatient.value.temperature == 102 || this.enrollPatient.value.temperature == 103 || this.enrollPatient.value.temperature == 104 || this.enrollPatient.value.temperature == 105) {
+                control2.get('time').patchValue(4);
+              }
             }
+
+            if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 35) {
+              this.addDosage();
+              const control3 = formArray.at(2);
+              control3.get('medicineTypeId').patchValue(foundObject?.id);
+              let medicineList = this.getMedicineById(foundObject?.id);
+              control3.get('mediList').setValue(medicineList);
+              const foundObject1 = this.DosageMedicine.at(2).get('mediList').value.find(item => item.medicineName === 'CPM (Del)');
+              control3.get('unit').patchValue(foundObject1?.unitofMeasure);
+              control3.get('medicineId').patchValue(foundObject1?.id);
+              let dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
+              control3.get('dosageList').setValue(dosageList);
+              control3.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
+              control3.get('time').patchValue(3);
+
+            }
+
           }
-
-          if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 35) {
-            this.addDosage();
-            const control3 = formArray.at(2);
-            control3.get('medicineTypeId').patchValue(foundObject.id);
-            this.medicineList(foundObject.id, control3, '3')
-            control3.get('time').patchValue(3);
-
-          }
-        }*/
-
-
-
-
-        //#region new static work
-
-        if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101 || this.enrollPatient.value.temperature == 102 || this.enrollPatient.value.temperature == 103 || this.enrollPatient.value.temperature == 104 || this.enrollPatient.value.temperature == 105) {
-          const formArray = this.DosageMedicine;
-          while (formArray.length !== 0) {
-            formArray.removeAt(0);
-          }
-          const foundObject = this.allMedicineType.find(item => item.medicineTypeName === 'Syp.');
-          if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 10) {
+          if (this.enrollPatient.value.weight >= 40) {
+            const formArray = this.DosageMedicine;
+            while (formArray.length !== 0) {
+              formArray.removeAt(0);
+            }
+            const foundObject = this.allMedicineType.find(item => item.medicineTypeName === 'Tab.');
             this.addDosage();
             const control = formArray.at(0);
-            control.get('medicineTypeId').patchValue(foundObject.id);
-            let medicineList = this.getMedicineById(foundObject.id)
+            control.get('medicineTypeId').patchValue(foundObject?.id);
+            let medicineList = this.getMedicineById(foundObject?.id)
             control.get('mediList').setValue(medicineList);
-            const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM');
+            let foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM');
             control.get('unit').patchValue(foundObject1.unitofMeasure);
-            control.get('medicineId').patchValue(foundObject1.id);
-            let dosageList = this.getDosageById(foundObject.id,foundObject1.id,this.enrollPatient.value.weight)
+            control.get('medicineId').patchValue(foundObject1?.id);
+            let dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
             control.get('dosageList').setValue(dosageList);
             control.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
-            if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101) {
-              control.get('time').patchValue(3);
-            } else {
-              control.get('time').patchValue(4);
-            }
-          }
-          if (this.enrollPatient.value.weight >= 10 && this.enrollPatient.value.weight <= 35) {
-            this.addDosage();
-            const control1 = formArray.at(0);
-            control1.get('medicineTypeId').patchValue(foundObject.id);
-            let medicineList = this.getMedicineById(foundObject.id);
-            control1.get('mediList').setValue(medicineList);
-            const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM 1 Fast');
-            control1.get('unit').patchValue(foundObject1.unitofMeasure);
-            control1.get('medicineId').patchValue(foundObject1.id);
-            let dosageList = this.getDosageById(foundObject.id,foundObject1.id,this.enrollPatient.value.weight)
-            control1.get('dosageList').setValue(dosageList);
-            control1.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
-            if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101) {
-              control1.get('time').patchValue(3);
-            } else {
-              control1.get('time').patchValue(4);
-            }
-          }
-          if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 35) {
+
+
             this.addDosage();
             const control2 = formArray.at(1);
-            control2.get('medicineTypeId').patchValue(foundObject.id);
-            let medicineList = this.getMedicineById(foundObject.id);
+            control2.get('medicineTypeId').patchValue(foundObject?.id);
+            medicineList = this.getMedicineById(foundObject?.id);
             control2.get('mediList').setValue(medicineList);
-            const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'Brufen');
-            control2.get('unit').patchValue(foundObject1.unitofMeasure);
-            control2.get('medicineId').patchValue(foundObject1.id);
-            let dosageList = this.getDosageById(foundObject.id,foundObject1.id,this.enrollPatient.value.weight)
+            foundObject1 = this.DosageMedicine.at(1).get('mediList').value.find(item => item.medicineName === 'CPM');
+            control2.get('unit').patchValue(foundObject1?.unitofMeasure);
+            control2.get('medicineId').patchValue(foundObject1?.id);
+            dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
             control2.get('dosageList').setValue(dosageList);
             control2.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
-            if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101) {
-              control2.get('time').patchValue(3);
-            } else {
-              control2.get('time').patchValue(4);
-            }
-          }
 
-          if (this.enrollPatient.value.weight >= 2 && this.enrollPatient.value.weight <= 35) {
+
             this.addDosage();
             const control3 = formArray.at(2);
-            control3.get('medicineTypeId').patchValue(foundObject.id);
-            let medicineList = this.getMedicineById(foundObject.id);
+            control3.get('medicineTypeId').patchValue(foundObject?.id);
+            medicineList = this.getMedicineById(foundObject?.id);
             control3.get('mediList').setValue(medicineList);
-            const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'CPM (Del)');
-            control3.get('unit').patchValue(foundObject1.unitofMeasure);
-            control3.get('medicineId').patchValue(foundObject1.id);
-            let dosageList = this.getDosageById(foundObject.id,foundObject1.id,this.enrollPatient.value.weight)
+            foundObject1 = this.DosageMedicine.at(2).get('mediList').value.find(item => item.medicineName === 'Diclo');
+            control3.get('unit').patchValue(foundObject1?.unitofMeasure);
+            control3.get('medicineId').patchValue(foundObject1?.id);
+            dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
             control3.get('dosageList').setValue(dosageList);
             control3.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
-            control3.get('time').patchValue(3);
+
+
+
+            this.addDosage();
+            const control4 = formArray.at(3);
+            control4.get('medicineTypeId').patchValue(foundObject?.id);
+            medicineList = this.getMedicineById(foundObject?.id);
+            control4.get('mediList').setValue(medicineList);
+            foundObject1 = this.DosageMedicine.at(3).get('mediList').value.find(item => item.medicineName === 'Delta');
+            control4.get('unit').patchValue(foundObject1?.unitofMeasure);
+            control4.get('medicineId').patchValue(foundObject1?.id);
+            dosageList = this.getDosageById(foundObject?.id, foundObject1?.id, this.enrollPatient.value.weight)
+            control4.get('dosageList').setValue(dosageList);
+            control4.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
+
+            const foundObject2 = this.allMedicineType.find(item => item.medicineTypeName === 'Cap.');
+            this.addDosage();
+            const control5 = formArray.at(4);
+            control5.get('medicineTypeId').patchValue(foundObject2?.id);
+            medicineList = this.getMedicineById(foundObject2?.id);
+            console.log('bbbb', medicineList)
+            control5.get('mediList').setValue(medicineList);
+            foundObject1 = this.DosageMedicine.at(4).get('mediList').value.find(item => item.medicineName === 'Noran');
+            console.log('aaaa', foundObject1)
+            control5.get('unit').patchValue(foundObject1?.unitofMeasure);
+            control5.get('medicineId').patchValue(foundObject1?.id);
+            dosageList = this.getDosageById(foundObject2?.id, foundObject1?.id, this.enrollPatient.value.weight)
+            control5.get('dosageList').setValue(dosageList);
+            control5.get('dosageId').setValue(dosageList[0]?.id ? dosageList[0]?.id : '');
 
           }
-        }
 
-        //#endregion
+          //#endregion
         }
 
       }
@@ -342,6 +359,7 @@ export class PatientFormComponent implements OnInit {
           })
           if (result.res.patient_internal_medicine && result.res.patient_internal_medicine.length > 0) {
             this.internalmedi = result.res.patient_internal_medicine;
+            console.log('result.res.patient_internal_medicine',result.res.patient_internal_medicine)
             this.patchFormArrayValuesLocally(result.res.patient_internal_medicine);
 
           }
@@ -360,29 +378,34 @@ export class PatientFormComponent implements OnInit {
     }
   }
 
-  /*patchFormArrayValues(data: any[]) {
-    const formArray = this.DosageMedicine;
-    while (formArray.length !== 0) {
-      formArray.removeAt(0);
+
+  preview() {
+    this.historyCheck = false
+    this.medicinePreview = true;
+    this.doctorPreview = [];
+    if (this.DosageMedicine.value.length > 0) {
+      this.DosageMedicine.value.forEach(item => {
+        let matchedMedicineType = this.allMedicineType.find(medicine => medicine.id == item.medicineTypeId);
+        let matchedMedicine = this.allMedicine.find(medicine => medicine.id == item.medicineId);
+        let dosage;
+        if (item.dosageId > 0) {
+          dosage = this.allDosage.find(medicine => medicine.id == item.dosageId).dosage;
+        } else {
+          dosage = item.dosage;
+        }
+        const obj = {
+          medicineType: matchedMedicineType.medicineTypeName,
+          medicine: matchedMedicine.medicineName,
+          dosage: dosage + matchedMedicine.unitofMeasure,
+          time: item.time
+        }
+        this.doctorPreview.push(obj);
+
+      });
+      console.log('this.doctorPreview', this.doctorPreview)
     }
-    data.forEach((item, index) => {
-      var dosageBool = false;
-      var timeBool = false;
-      if (item.dosage != 0 && item.dosage != null) {
-        dosageBool = true;
-      }
-      if (item.time > 4) {
-        timeBool = true;
-      }
-      this.addDosage()
-      this.callMedicineListForPatch(item, index, 'edit');
-      const control = formArray.at(index);
-      control.get('time').patchValue(item.time);
-      control.get('dosage').patchValue(item.dosage);
-      control.get('isDropdown').patchValue(timeBool);
-      control.get('isdosageDropDown').patchValue(dosageBool);
-    });
-  }*/
+  }
+
 
   print(): void {
     this.printCheck = true;
@@ -401,6 +424,7 @@ export class PatientFormComponent implements OnInit {
       if (result.status) {
         this.patienHistory = result.res;
         this.historyCheck = true;
+        this.medicinePreview = false
       }
       else {
         this.toastr.error(JSON.stringify(result.message));
@@ -460,161 +484,6 @@ export class PatientFormComponent implements OnInit {
     })
   }
 
- /* mediTypelist() {
-    this.spinner.show();
-    this.apiService.mediTypeList().subscribe((result: any) => {
-      if (result.status) {
-        this.medTypeList = result.res
-        this.spinner.hide();
-      }
-      else {
-        this.toastr.error(JSON.stringify(result.message));
-        this.spinner.hide();
-      }
-    }, (err) => {
-      this.spinner.hide();
-      this.toastr.error('Something went wrong');
-    })
-  }
-
-
-
-  callMedicineList(event, index) {
-    const newValue = event.target.value;
-    const control = this.DosageMedicine.at(index);
-    control.get('medicineTypeId').setValue(newValue);
-    this.medicineList(newValue, control);
-  }
-
-  callMedicineListForPatch(event, index, val = '') {
-    const newValue = event;
-    const control = this.DosageMedicine.at(index);
-    let id = 0;
-    if (val == 'edit') {
-      id = newValue.medicineTypeId
-    } else {
-      id = newValue
-    }
-    control.get('medicineTypeId').setValue(id);
-    this.medicineList(newValue, control, val, index);
-  }
-
-  medicineList(id, control, val = '', index = 0) {
-    this.spinner.show();
-    let typeId = 0;
-    if (val == 'edit') {
-      typeId = id.medicineTypeId
-    } else {
-      typeId = id
-    }
-    this.apiService.medicineListByType(typeId).subscribe((result: any) => {
-      if (result.status) {
-
-        control.get('mediList').setValue(result.res);
-        control.get('medicineId').enable();
-        let id1;
-        if (val == 'edit') {
-          id1 = id.medicineId
-        } else {
-          id1 = '';
-        }
-        control.get('medicineId').setValue(id1);
-        if (val == 'edit') {
-          this.callDosageList(id, index, val)
-        }
-         //#region static work 
-        if (this.enrollPatient.value.temperature == 99 || this.enrollPatient.value.temperature == 100 || this.enrollPatient.value.temperature == 101 || this.enrollPatient.value.temperature == 102 || this.enrollPatient.value.temperature == 103 || this.enrollPatient.value.temperature == 104 || this.enrollPatient.value.temperature == 105) {
-          if (val == '0') {
-            const foundObject1 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM');
-            control.get('unit').patchValue(foundObject1.unitofMeasure);
-            control.get('medicineId').patchValue(foundObject1.id);
-            this.DosageList(foundObject1.id, control);
-          }
-          if (val == '1') {
-            const foundObject2 = this.DosageMedicine.at(0).get('mediList').value.find(item => item.medicineName === 'PCM 1 Fast');
-            control.get('medicineId').patchValue(foundObject2.id);
-            control.get('unit').patchValue(foundObject2.unitofMeasure);
-            this.DosageList(foundObject2.id, control);
-          }
-          if (val == '2') {
-            const foundObject3 = this.DosageMedicine.at(1).get('mediList').value.find(item => item.medicineName === 'Brufen');
-            control.get('unit').patchValue(foundObject3.unitofMeasure);
-            control.get('medicineId').patchValue(foundObject3.id);
-            this.DosageList(foundObject3.id, control);
-          }
-
-          if (val == '3') {
-            const foundObject4 = this.DosageMedicine.at(2).get('mediList').value.find(item => item.medicineName === 'CPM (Del)');
-            control.get('medicineId').patchValue(foundObject4.id);
-            control.get('unit').patchValue(foundObject4.unitofMeasure);
-            this.DosageList(foundObject4.id, control);
-          }
-          //#endregion
-        }
-        this.spinner.hide();
-      } else {
-        this.toastr.error(JSON.stringify(result.message));
-        this.spinner.hide();
-      }
-    }, (err) => {
-      this.spinner.hide();
-      this.toastr.error('Something went wrong');
-    });
-  }
-
-
-  callDosageList(event, index, val = '') {
-    let newValue;
-    let medicineId;
-    if (val == 'edit') {
-      newValue = event//.dosageId == 0 ? null : event.dosageId
-      medicineId = event.medicineId
-    } else {
-      newValue = event.target.value;
-      medicineId = event.target.value
-    }
-    const control = this.DosageMedicine.at(index);
-    var list = control.get('mediList').value.find(x => x.id == medicineId)
-    control.get('unit').setValue(list.unitofMeasure);
-    control.get('medicineId').setValue(medicineId);
-    this.DosageList(newValue, control, val);
-  }
-
-  DosageList(id, control, val = '') {
-    this.spinner.show();
-    let medId = 0;
-    if (val == 'edit') {
-      medId = id.medicineId
-    } else {
-      medId = id
-    }
-    const weight = this.enrollPatient.get('weight').value;
-    const obj = {
-      medicineTypeId: control.get('medicineTypeId').value,
-      medicineId: medId,
-      weight: weight
-    };
-    this.apiService.dosageListByType(obj).subscribe((result: any) => {
-      if (result.status) {
-        control.get('dosageList').setValue(result.res);
-        let id1
-        if (val == 'edit') {
-          id1 = id.dosageId == 0 ? null : id.dosageId;
-        } else {
-          id1 = result.res[0]?.id ? result.res[0].id : ''
-        }
-        control.get('dosageId').setValue(id1);
-
-        this.spinner.hide();
-      } else {
-        this.toastr.error(JSON.stringify(result.message));
-        this.spinner.hide();
-      }
-    }, (err) => {
-      this.spinner.hide();
-      this.toastr.error('Something went wrong');
-    });
-  }*/
 
   closeForm() {
     this.router.navigate(['patient']);
@@ -674,6 +543,23 @@ export class PatientFormComponent implements OnInit {
     if (textareaElement) {
       const cursorPosition = textareaElement.selectionStart;
       const currentValue = this.enrollPatient.value.outdoor;
+      const newValue = currentValue.substring(0, cursorPosition) + value + currentValue.substring(cursorPosition);
+      textareaElement.value = newValue;
+      textareaElement.setSelectionRange(cursorPosition + value.length, cursorPosition + value.length);
+      textareaElement.focus();
+      this.enrollPatient.patchValue({ outdoor: textareaElement.value })
+    }
+  }
+
+  MedselectionClick(value: any) {
+    const textareaElement: HTMLTextAreaElement = this.textArea1.nativeElement;
+
+    if (textareaElement) {
+      const cursorPosition = textareaElement.selectionStart;
+      const currentValue = this.enrollPatient.value.outdoor;
+      if (currentValue.includes('nebulize ')) {
+        value = ' + ' + value
+      }
       const newValue = currentValue.substring(0, cursorPosition) + value + currentValue.substring(cursorPosition);
       textareaElement.value = newValue;
       textareaElement.setSelectionRange(cursorPosition + value.length, cursorPosition + value.length);
@@ -753,13 +639,13 @@ export class PatientFormComponent implements OnInit {
       control.get('dosageList').setValue(dosageList);
       control.get('dosageId').setValue(dosageId);
       var list = control.get('mediList').value.find(x => x.id == medicineId);
-      console.log('list',list)
+      console.log('list', list)
       control.get('unit').setValue(list?.unitofMeasure);
       control.get('time').patchValue(item.time);
       control.get('dosage').patchValue(item.dosage);
       control.get('isDropdown').patchValue(timeBool);
       control.get('isdosageDropDown').patchValue(dosageBool);
-      
+
     });
   }
 
@@ -767,8 +653,11 @@ export class PatientFormComponent implements OnInit {
     return this.allMedicine.filter(x => x.medicineTypeId == id);
   }
 
+
+
+
   getDosageById(typeId, id, weight) {
-    return this.allDosage.filter(x => {
+    const filteredDosages = this.allDosage.filter(x => {
       if (x.weight.includes('+')) {
         const parsedWeight = parseFloat(x.weight);
         const givenWeight = parseFloat(weight);
@@ -777,8 +666,21 @@ export class PatientFormComponent implements OnInit {
         return x.medicineTypeId == typeId && x.medicineId == id && x.weight == weight;
       }
     });
+
+    if (filteredDosages.length > 1) {
+      const plusWeightDosages = filteredDosages.filter(x => x.weight.includes('+'));
+      if (plusWeightDosages.length > 0) {
+        const parsedWeights = plusWeightDosages.map(x => parseFloat(x.weight));
+        const closestWeight = parsedWeights.reduce((prev, curr) => {
+          return curr <= weight ? Math.max(prev, curr) : prev;
+        }, -Infinity);
+        return filteredDosages.filter(x => parseFloat(x.weight) == closestWeight);
+      }
+    }
+
+    return filteredDosages;
   }
-  
+
 
   //#endregion
 }

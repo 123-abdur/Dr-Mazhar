@@ -335,6 +335,8 @@
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-12 text-right">
+                                    <a class="btn btn-sm btn-primary" (click)="preview()">Preview
+                                    </a>
                                     <a class="btn btn-sm btn-primary" (click)="populate()">Populate Value
                                     </a>
                                     <a class="btn btn-sm btn-primary" (click)="showHistory()">View history
@@ -343,6 +345,44 @@
                                     </a>
                                 </div>
                             </div>
+                        </span>
+                        <span *ngIf="role =='Doctor' && medicinePreview">
+                            <hr class="my-4" />
+                            <h6 class="heading-small text-muted mb-4">
+                                Preview</h6>
+                                    <a class="btn btn-sm btn-primary" (click)="medicinePreview = false"> Close Preview
+                                    </a>
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Sr.No</th>
+                                        <th scope="col">Medicine Type</th>
+                                        <th scope="col">Medicine Name</th>
+                                        <th scope="col">Dosage</th>
+                                        <th scope="col">Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let list of doctorPreview; let i = index">
+                                        <td>
+                                            {{i+1}}
+                                        </td>
+                                        <td>
+                                            {{list.medicineType}}
+                                        </td>
+                                        <td>
+                                            {{list.medicine}}
+                                        </td>
+                                        <td>
+                                            {{list.dosage}}
+                                        </td>
+                                        <td>
+                                            {{list.time}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </span>
                         <span *ngIf="role !='Doctor'">
 
@@ -384,8 +424,35 @@
                             <div class="pl-lg-4">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <textarea class="disabled-textArea" disabled formControlName="outdoor"
+                                        <textarea class="disabled-textArea" *ngIf="role !='Despenser'" disabled
+                                            formControlName="outdoor" type="text"></textarea>
+                                        <textarea class="form-control form-control-alternative"
+                                            *ngIf="role =='Despenser'" #textArea1 formControlName="outdoor"
                                             type="text"></textarea>
+                                        <br>
+                                        <div *ngIf="role =='Despenser'" class="pl-lg-4">
+                                            <div class="row">
+                                                <div class="row" *ngFor="let item of outdoorMedicineList">
+                                                    <div class="col-md-12 mb-2">
+                                                        <a class="btn btn-sm btn-primary"
+                                                            (click)="MedselectionClick(item)">{{item}}</a>&nbsp;
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div *ngIf="role =='Despenser'" class="pl-lg-4">
+                                            <div class="row">
+                                                <div class="row" *ngFor="let item of selectionList">
+                                                    <div class="col-md-12 mb-2">
+                                                        <a class="btn btn-sm btn-primary"
+                                                            (click)="selectionClick(item)">{{item}}</a>&nbsp;
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -405,7 +472,8 @@
                             <div class="container history-div">
                                 <div *ngFor="let item of patienHistory">
                                     <span *ngIf="item.patient_internal_medicine.length > 0" class="card history-card">
-                                        <div class="form-check form-check-inline" style="justify-content: flex-end;" *ngIf="role =='Doctor'">
+                                        <div class="form-check form-check-inline" style="justify-content: flex-end;"
+                                            *ngIf="role =='Doctor'">
                                             <input type="radio" formControlName="historyId" value="{{item.id}}"
                                                 class="form-check-input" />
                                         </div>
@@ -526,7 +594,7 @@
                                 <div class="row" *ngFor="let item of outdoorMedicineList">
                                     <div class="col-md-12 mb-2">
                                         <a class="btn btn-sm btn-primary"
-                                            (click)="selectionClick(item)">{{item}}</a>&nbsp;
+                                            (click)="MedselectionClick(item)">{{item}}</a>&nbsp;
                                     </div>
                                 </div>
                             </div>
@@ -540,9 +608,9 @@
                                             (click)="selectionClick(item)">{{item}}</a>&nbsp;
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                         </div>
                         <hr class="my-4" />
                         <h6 class="heading-small text-muted mb-4">Amount</h6>
@@ -617,7 +685,7 @@
                         <div class="row align-items-center">
 
                             <div class="col-12 text-right">
-                                
+
                                 <span *ngIf="role !='Doctor'" class="flex-end">
                                     <div class="col-lg-4">
                                         <div class="form-check form-check-inline">
@@ -662,70 +730,73 @@
 <form *ngIf="printCheck" [formGroup]="enrollPatient">
     <div *ngIf="enrollPatient.value.template == 'simple'">
         <span *ngIf="enrollPatient.value.printIndoor == 'outdoor'">
-        <div class="print-simple">
-            <div class="pl-lg-4">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div style="font-size: 18px;">
-                            <label class="form-control-label">Dr Mazhar Manzoor </label>
+            <div class="print-simple">
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div style="font-size: 18px;">
+                                <label class="form-control-label">Dr Mazhar Manzoor </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div style="font-size: 18px;">
+                                <label class="form-control-label">PH #: 0333-4137197 </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div style="font-size: 18px;">
+                                <label class="form-control-label">Date: {{ currentDate | date:'dd/MM/yyyy' }} </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group" style="font-size: 14px;">
+                                <label class="form-control-label">Patient Name: </label>
+                                {{enrollPatient.value.name}}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group" style="font-size: 14px;">
+                                <label class="form-control-label">Guardian Name: </label>
+                                {{enrollPatient.value.guardian}}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group" style="font-size: 14px;">
+                                <label class="form-control-label">Age: </label>
+                                {{enrollPatient.value.age}}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="pl-lg-4">
+            <hr class="my-4 print-simple" />
+            <h6 class="heading-small text-muted mb-4 print-simple-heading" style="font-size: 24px;">Medicine Prescribed
+            </h6>
+            <div class="pl-lg-4 print-simple">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div style="font-size: 18px;">
-                            <label class="form-control-label">PH #: 0333-4137197 </label>
-                        </div>
+                    <div class="col-lg-9">
+                        <p style="font-size: 18px;padding-left: 38%;font-weight: bolder;" class="break-text"
+                            [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.outdoor)"></p>
+                    </div>
+                    <div class="col-lg-3 pad-top-sixteen" style="padding-right: 13%;">
+                        <p style="font-size: 18px;font-weight: bolder"><strong>Advised:</strong></p>
+                        <p style="font-size: 18px;font-weight: bolder" class="break-text"
+                            [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.advised)"></p>
                     </div>
                 </div>
             </div>
-            <div class="pl-lg-4">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div style="font-size: 18px;">
-                            <label class="form-control-label">Date:  {{ currentDate | date:'dd/MM/yyyy' }} </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="pl-lg-4">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="form-group" style="font-size: 14px;">
-                            <label class="form-control-label">Patient Name: </label>
-                            {{enrollPatient.value.name}}
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group" style="font-size: 14px;">
-                            <label class="form-control-label">Guardian Name: </label>
-                            {{enrollPatient.value.guardian}}
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group" style="font-size: 14px;">
-                            <label class="form-control-label">Age: </label>
-                            {{enrollPatient.value.age}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr class="my-4 print-simple" />
-        <h6 class="heading-small text-muted mb-4 print-simple-heading" style="font-size: 24px;">Medicine Prescribed</h6>
-        <div class="pl-lg-4 print-simple">
-            <div class="row">
-                <div class="col-lg-9">
-                <p style="font-size: 18px;padding-left: 38%;" class="break-text" [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.outdoor)"></p>
-            </div>
-            <div class="col-lg-3 pad-top-sixteen" style="padding-right: 13%;">
-                <p style="font-size: 18px;"><strong>Advised:</strong></p>
-                <p style="font-size: 18px;" class="break-text" [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.advised)"></p>
-            </div>
-            </div>
-        </div>
         </span>
 
         <span *ngIf="enrollPatient.value.printIndoor == 'indoor'">
@@ -762,46 +833,47 @@
                     </div>
                 </div>
             </div>
-            <h6 class="heading-small text-muted mb-4 print-simple-heading" style="font-size: 24px;">Medicine Prescribed</h6>
+            <h6 class="heading-small text-muted mb-4 print-simple-heading" style="font-size: 24px;">Medicine Prescribed
+            </h6>
             <div class="pl-lg-4 print-simple">
                 <div class="row">
 
-                <span  style="font-size: 24px;padding-left: 26%;">
+                    <span style="font-size: 24px;padding-left: 26%;">
 
-                    <table class="table align-items-center table-flush">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Sr.No</th>
-                                <th scope="col">Medicine Type</th>
-                                <th scope="col">Medicine Name</th>
-                                <th scope="col">Dosage</th>
-                                <th scope="col">Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let list of internalmedi; let i = index">
-                                <td>
-                                    {{i+1}}
-                                </td>
-                                <td>
-                                    {{list.medicineTypeName}}
-                                </td>
-                                <td>
-                                    {{list.medicineName}}
-                                </td>
-                                <td *ngIf="list.dosageN">
-                                    {{list.dosageN}} {{list.unitOfMeasure}}
-                                </td>
-                                <td *ngIf="!list.dosageN">
-                                    {{list.dosage}} {{list.unitOfMeasure}}
-                                </td>
-                                <td>
-                                    {{list.time}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </span>
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Sr.No</th>
+                                    <th scope="col">Medicine Type</th>
+                                    <th scope="col">Medicine Name</th>
+                                    <th scope="col">Dosage</th>
+                                    <th scope="col">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let list of internalmedi; let i = index">
+                                    <td style="font-weight: bolder">
+                                        {{i+1}}
+                                    </td>
+                                    <td style="font-weight: bolder">
+                                        {{list.medicineTypeName}}
+                                    </td>
+                                    <td style="font-weight: bolder">
+                                        {{list.medicineName}}
+                                    </td>
+                                    <td style="font-weight: bolder" *ngIf="list.dosageN">
+                                        {{list.dosageN}} {{list.unitOfMeasure}}
+                                    </td>
+                                    <td style="font-weight: bolder" *ngIf="!list.dosageN">
+                                        {{list.dosage}} {{list.unitOfMeasure}}
+                                    </td>
+                                    <td style="font-weight: bolder">
+                                        {{list.time}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </span>
 
 
 
@@ -810,7 +882,7 @@
 
                 </div>
             </div>
-            </span>
+        </span>
     </div>
     <div *ngIf="enrollPatient.value.template == 'head'" style="padding-top: 33%;">
         <div>
@@ -837,19 +909,24 @@
         <div>
             <div class="row" style="padding-top: 6%;">
                 <div class="col-lg-3">
-                    <p style="font-size: 24px;"><strong>BP: </strong>{{enrollPatient.value.bP}}</p>
-                    <p style="font-size: 24px;"><strong>Temp:</strong>{{enrollPatient.value.temperature}}</p>
-                    <p style="font-size: 24px;"><strong>Symptoms:</strong></p>
-                    <p style="font-size: 24px;" class="break-text" [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.symptoms)"></p>
-                    <p style="font-size: 24px;"><strong>Diagnosis:</strong></p>
-                    <p style="font-size: 24px;" class="break-text" [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.diagnosis)"></p>
+                    <p style="font-size: 24px;font-weight: bolder; "><strong>BP: </strong>{{enrollPatient.value.bP}}</p>
+                    <p style="font-size: 24px;font-weight: bolder;">
+                        <strong>Temp:</strong>{{enrollPatient.value.temperature}}</p>
+                    <p style="font-size: 24px;font-weight: bolder;"><strong>Symptoms:</strong></p>
+                    <p style="font-size: 24px;font-weight: bolder;" class="break-text"
+                        [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.symptoms)"></p>
+                    <p style="font-size: 24px;font-weight: bolder;"><strong>Diagnosis:</strong></p>
+                    <p style="font-size: 24px;font-weight: bolder;" class="break-text"
+                        [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.diagnosis)"></p>
                 </div>
                 <div class="col-lg-6">
-                    <p style="font-size: 24px;" class="break-text" [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.outdoor)"></p>
+                    <p style="font-size: 24px;font-weight: bolder;" class="break-text"
+                        [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.outdoor)"></p>
                 </div>
                 <div class="col-lg-3 pad-top-sixteen">
-                    <p style="font-size: 24px;"><strong>Advised:</strong></p>
-                    <p style="font-size: 24px;" class="break-text" [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.advised)"></p>
+                    <p style="font-size: 24px;font-weight: bolder;"><strong>Advised:</strong></p>
+                    <p style="font-size: 24px;font-weight: bolder;" class="break-text"
+                        [innerHTML]="convertNewlinesToBreaks(enrollPatient.value.advised)"></p>
                 </div>
             </div>
         </div>
