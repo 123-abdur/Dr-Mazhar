@@ -39,3 +39,15 @@ testem.log
 .DS_Store
 Thumbs.db
 package-lock.json
+/.vs/VSWorkspaceState.json
+/.vs/argon-dashboard-angular-master/v17/.wsuo
+/.vs/argon-dashboard-angular-master/v17/workspaceFileList.bin
+/.vs/slnx.sqlite
+/.vs/argon-dashboard-angular-master/FileContentIndex/merges/21b4a715-1497-4f47-b9c4-7dd7d32aca6f.vsidx
+/.vs/argon-dashboard-angular-master/FileContentIndex/7670739d-247e-4ca6-9b2a-376fb1dbaf6a.vsidx
+/.vs/argon-dashboard-angular-master/FileContentIndex/998fad14-e283-4b4f-bdb8-f850dc8c8537.vsidx
+/.vs/argon-dashboard-angular-master/FileContentIndex/merges/d3b740b1-a0a0-4696-b338-9b47abe84cfd.vsidx
+/.vs/argon-dashboard-angular-master/FileContentIndex/cf3e6ca2-c73c-4984-a180-51223d33ccb6.vsidx
+/.vs/argon-dashboard-angular-master/FileContentIndex/read.lock
+/.vs/argon-dashboard-angular-master/FileContentIndex/adea7d97-b3ab-4eff-af1c-3c46f7fadf21.vsidx
+/.vs/argon-dashboard-angular-master/FileContentIndex/b53971f1-4811-4760-8938-b05402413eae.vsidx
